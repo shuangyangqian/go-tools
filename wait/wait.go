@@ -5,20 +5,12 @@ import (
 	"time"
 )
 
-var (
-	// ReallyCrash controls the behavior of HandleCrash and now defaults
-	// true. It's still exposed so components can optionally set to false
-	// to restore prior behavior.
-	ReallyCrash = true
-)
-
-
 // Until loops until stop channel is closed, running f every period.
 //
 // Until is syntactic sugar on top of JitterUntil with zero jitter factor and
 // with sliding = true (which means the timer for period starts after the f
 // completes).
-func Until(f func(), period time.Duration, stopCh <- chan struct{}) {
+func Until(f func(), period time.Duration, stopCh <-chan struct{}) {
 	JitterUntil(f, period, 0.0, true, stopCh)
 }
 
@@ -32,7 +24,7 @@ func Until(f func(), period time.Duration, stopCh <- chan struct{}) {
 //
 // Close stopCh to stop. f may not be invoked if stop channel is already
 // closed. Pass NeverStop to if you don't want it stop.
-func JitterUntil(f func(), period time.Duration, jitterFactor float64, sliding bool, stopCh <-chan struct{})  {
+func JitterUntil(f func(), period time.Duration, jitterFactor float64, sliding bool, stopCh <-chan struct{}) {
 	var t *time.Timer
 	var sawTimeout bool
 
